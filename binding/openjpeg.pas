@@ -45,6 +45,19 @@
 * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 * POSSIBILITY OF SUCH DAMAGE.
 *)
+
+unit openjpeg;
+
+{$mode objfpc}{$H+}
+
+interface
+
+uses
+  ctypes;
+
+const
+  LIB_LIBOPENJPEG = 'libopenjp2-7.dll';
+
 // #ifndef OPENJPEG_H
 // #define OPENJPEG_H
 
@@ -114,6 +127,7 @@
 // #endif (* !OPJ_STATIC || !_WIN32 *)
 
 type
+  POPJ_BOOL = ^OPJ_BOOL;
   OPJ_BOOL = cint;
 
 const
@@ -122,23 +136,27 @@ const
 
 type
   OPJ_CHAR = cchar;
+  POPJ_FLOAT32 = ^OPJ_FLOAT32;
   OPJ_FLOAT32 = cfloat;
   OPJ_FLOAT64 = cdouble;
+  POPJ_BYTE = ^OPJ_BYTE;
   OPJ_BYTE = cuchar;
 
 {$include opj_stdint.inc}
 
 type
-  OPJ_INT8 = cint8_t;
-  OPJ_UINT8 = cuint8_t;
-  OPJ_INT16 = cint16_t;
-  OPJ_UINT16 = cuint16_t;
-  OPJ_INT32 = cint32_t;
-  OPJ_UINT32 = cuint32_t;
-  OPJ_INT64 = cint64_t;
-  OPJ_UINT64 = cuint64_t;
+  OPJ_INT8 = int8_t;
+  OPJ_UINT8 = uint8_t;
+  OPJ_INT16 = int16_t;
+  OPJ_UINT16 = uint16_t;
+  POPJ_INT32 = ^OPJ_INT32;
+  OPJ_INT32 = int32_t;
+  POPJ_UINT32 = ^OPJ_UINT32;
+  OPJ_UINT32 = uint32_t;
+  OPJ_INT64 = int64_t;
+  OPJ_UINT64 = uint64_t;
 
-  OPJ_OFF_T = cint64_t; (* 64-bit file offset type *)
+  OPJ_OFF_T = int64_t; (* 64-bit file offset type *)
 
 // #include <stdio.h>
   OPJ_SIZE_T = csize_t;
@@ -363,6 +381,7 @@ type
 (**
  * Compression parameters
  * *)
+  Popj_cparameters_t = ^opj_cparameters_t;
   opj_cparameters_t = record
     (** size of tile: tile_size_on = false (not in argument) or = true (in argument) *)
     tile_size_on: OPJ_BOOL;
@@ -521,6 +540,7 @@ const
  * Decompression parameters
  * *)
 type
+  Popj_dparameters_t = ^opj_dparameters_t;
   opj_dparameters_t = record
     (**
     Set the number of highest resolution levels to be discarded.
@@ -639,7 +659,8 @@ type
  * JPEG2000 Stream.
  *)
 type
-  opj_stream_t: pointer;
+  Popj_stream_t = ^opj_stream_t;
+  opj_stream_t = pointer;
 
 (*
 ==========================================================
@@ -651,6 +672,7 @@ type
  * Defines a single image component
  * *)
 type
+  Popj_image_comp_t = ^opj_image_comp_t;
   opj_image_comp_t = record
     (** XRsiz: horizontal separation of a sample of ith component with respect to the reference grid *)
     dx: OPJ_UINT32;
@@ -683,6 +705,8 @@ type
 (**
  * Defines image data and characteristics
  * *)
+  PPopj_image_t = ^Popj_image_t;
+  Popj_image_t = ^opj_image_t;
   opj_image_t = record
     (** XOsiz: horizontal offset from the origin of the reference grid to the left side of the image area *)
     x0: OPJ_UINT32;
@@ -708,6 +732,7 @@ type
 (**
  * Component parameters structure used by the opj_image_create function
  * *)
+  Popj_image_cmptparm_t = ^opj_image_cmptparm_t;
   opj_image_cmptparm_t = record
     (** XRsiz: horizontal separation of a sample of ith component with respect to the reference grid *)
     dx: OPJ_UINT32;
@@ -740,6 +765,7 @@ type
 (**
  * Index structure : Information concerning a packet inside tile
  * *)
+  Popj_packet_info_t = ^opj_packet_info_t;
   opj_packet_info_t = record
     (** packet start position (including SOP marker if it exists) *)
     start_pos: OPJ_OFF_T;
@@ -756,6 +782,7 @@ type
 (**
  * Marker structure
  * *)
+  Popj_marker_info_t = ^opj_marker_info_t;
   opj_marker_info_t = record
     (** marker type *)
     type_: cushort;
@@ -769,6 +796,7 @@ type
 (**
  * Index structure : Information concerning tile-parts
 *)
+  Popj_tp_info_t = ^opj_tp_info_t;
   opj_tp_info_t = record
     (** start position of tile part *)
     tp_start_pos: cint;
@@ -785,6 +813,7 @@ type
 (**
  * Index structure : information regarding tiles
 *)
+  Popj_tile_info_t = ^opj_tile_info_t;
   opj_tile_info_t = record
     (** value of thresh for each layer by tile cfr. Marcela   *)
     thresh: pcdouble;
@@ -880,6 +909,7 @@ type
 (**
  * Tile-component coding parameters information
  *)
+  Popj_tccp_info_t = ^opj_tccp_info_t;
   opj_tccp_info_t = record
     (** component index *)
     compno: OPJ_UINT32;
@@ -914,6 +944,7 @@ type
 (**
  * Tile coding parameters information
  *)
+  Popj_tile_info_v2_t = ^opj_tile_info_v2_t;
   opj_tile_info_v2_t = record
     (** number (index) of tile *)
     tileno: cint;
@@ -933,6 +964,8 @@ type
 (**
  * Information structure about the codestream (FIXME should be expand and enhance)
  *)
+  PPopj_codestream_info_v2_t = ^Popj_codestream_info_v2_t;
+  Popj_codestream_info_v2_t = ^opj_codestream_info_v2_t;
   opj_codestream_info_v2_t = record
     (* Tile info *)
     (** tile origin in x = XTOsiz *)
@@ -962,6 +995,7 @@ type
 (**
  * Index structure about a tile part
  *)
+  Popj_tp_index_t = ^opj_tp_index_t;
   opj_tp_index_t = record
     (** start position *)
     start_pos: OPJ_OFF_T;
@@ -974,6 +1008,7 @@ type
 (**
  * Index structure about a tile
  *)
+  Popj_tile_index_t = ^opj_tile_index_t;
   opj_tile_index_t = record
     (** tile index *)
     tileno: OPJ_UINT32;
@@ -1005,6 +1040,8 @@ type
 (**
  * Index structure of the codestream (FIXME should be expand and enhance)
  *)
+  PPopj_codestream_index_t = ^Popj_codestream_index_t;
+  Popj_codestream_index_t = ^opj_codestream_index_t;
   opj_codestream_index_t = record
     (** main header start position (SOC position) *)
     main_head_start: OPJ_OFF_T;
@@ -1041,6 +1078,7 @@ type
  * Info structure of the JP2 file
  * EXPERIMENTAL FOR THE MOMENT
  *)
+  Popj_jp2_metadata_t = ^opj_jp2_metadata_t;
   opj_jp2_metadata_t = record
     (** *)
     not_used: OPJ_INT32;
@@ -1050,6 +1088,7 @@ type
  * Index structure of the JP2 file
  * EXPERIMENTAL FOR THE MOMENT
  *)
+  Popj_jp2_index_t = ^opj_jp2_index_t;
   opj_jp2_index_t = record
     (** *)
     not_used: OPJ_INT32;
@@ -1084,7 +1123,7 @@ function opj_version(): pchar; cdecl; external LIB_LIBOPENJPEG;
  * @param clrspc        image color space
  * @return returns      a new image structure if successful, returns NULL otherwise
  * *)
-function opj_image_create(numcmpts: OPJ_UINT32; cmptparms: Popj_image_cmptparm_t: clrspc: OPJ_COLOR_SPACE): Popj_image_t; cdecl; external LIB_LIBOPENJPEG;
+function opj_image_create(numcmpts: OPJ_UINT32; cmptparms: Popj_image_cmptparm_t; clrspc: OPJ_COLOR_SPACE): Popj_image_t; cdecl; external LIB_LIBOPENJPEG;
 
 (**
  * Deallocate any resources associated with an image
@@ -1316,8 +1355,8 @@ function opj_codec_set_threads(p_codec: Popj_codec_t; num_threads: cint): OPJ_BO
  *
  * @return true             if the main header of the codestream and the JP2 header is correctly read.
  *)
-function opj_read_header(p_stream: Popj_stream_t;c p_codec: Popj_codec_t; p_image: PPopj_image_t ): OPJ_BOOL; cdecl; external LIB_LIBOPENJPEG;
-
+function opj_read_header(p_stream: Popj_stream_t; p_codec: Popj_codec_t; p_image: PPopj_image_t): OPJ_BOOL; cdecl; external LIB_LIBOPENJPEG;
+        
 (**
  * Sets the given area to be decoded. This function should be called right after opj_read_header and before any tile header reading.
  *
@@ -1499,7 +1538,7 @@ procedure opj_destroy_cstr_info(cstr_info: PPopj_codestream_info_v2_t); cdecl; e
  * @param   output_stream   output stream where dump the information gotten from the codec.
  *
  *)
-procedure opj_dump_codec(p_codec: Popj_codec_t; info_flag: OPJ_INT32; FILE* output_stream); cdecl; external LIB_LIBOPENJPEG;
+procedure opj_dump_codec(p_codec: Popj_codec_t; info_flag: OPJ_INT32; var output_stream: file); cdecl; external LIB_LIBOPENJPEG;
 
 (**
  * Get the codestream information from the codec
@@ -1583,3 +1622,10 @@ function opj_get_num_cpus(): cint; cdecl; external LIB_LIBOPENJPEG;
 // #endif
 
 // #endif (* OPENJPEG_H *)
+
+
+implementation
+
+
+end.
+

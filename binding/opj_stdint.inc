@@ -42,14 +42,15 @@
 //TODO #include <stdint.h>
 //TODO #else
 //TODO #if defined(_WIN32)
-//TODO typedef   signed __int8   int8_t;
-//TODO typedef unsigned __int8   uint8_t;
-//TODO typedef   signed __int16  int16_t;
-//TODO typedef unsigned __int16  uint16_t;
-//TODO typedef   signed __int32  int32_t;
-//TODO typedef unsigned __int32  uint32_t;
-//TODO typedef   signed __int64  int64_t;
-//TODO typedef unsigned __int64  uint64_t;
+type
+  int8_t = cint8;
+  uint8_t = cuint8;
+  int16_t = cint16;
+  uint16_t = cuint16;
+  int32_t = cint32;
+  uint32_t = cuint32;
+  int64_t = cint64;
+  uint64_t = cuint64;
 //TODO #else
 //TODO #error unsupported platform
 //TODO #endif

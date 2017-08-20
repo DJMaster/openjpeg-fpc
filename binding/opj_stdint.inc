@@ -1,3 +1,9 @@
+//
+// openjpeg.h header binding for the Free Pascal Compiler aka FPC
+//
+// Binaries and demos available at http://www.djmaster.com/
+//
+
 (*
  * The copyright in this software is being made available under the 2-clauses
  * BSD License, included below. This software may be subject to other third
@@ -28,25 +34,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *)
-#ifndef OPJ_STDINT_H
-#define OPJ_STDINT_H
+// #ifndef OPJ_STDINT_H
+// #define OPJ_STDINT_H
 
-#include "opj_config.h"
-#ifdef OPJ_HAVE_STDINT_H
-#include <stdint.h>
-#else
-#if defined(_WIN32)
-typedef   signed __int8   int8_t;
-typedef unsigned __int8   uint8_t;
-typedef   signed __int16  int16_t;
-typedef unsigned __int16  uint16_t;
-typedef   signed __int32  int32_t;
-typedef unsigned __int32  uint32_t;
-typedef   signed __int64  int64_t;
-typedef unsigned __int64  uint64_t;
-#else
-#error unsupported platform
-#endif
-#endif
+//TODO #include "opj_config.h"
+//TODO #ifdef OPJ_HAVE_STDINT_H
+//TODO #include <stdint.h>
+//TODO #else
+//TODO #if defined(_WIN32)
+//TODO typedef   signed __int8   int8_t;
+//TODO typedef unsigned __int8   uint8_t;
+//TODO typedef   signed __int16  int16_t;
+//TODO typedef unsigned __int16  uint16_t;
+//TODO typedef   signed __int32  int32_t;
+//TODO typedef unsigned __int32  uint32_t;
+//TODO typedef   signed __int64  int64_t;
+//TODO typedef unsigned __int64  uint64_t;
+//TODO #else
+//TODO #error unsupported platform
+//TODO #endif
+//TODO #endif
 
-#endif (* OPJ_STDINT_H *)
+// #endif (* OPJ_STDINT_H *)

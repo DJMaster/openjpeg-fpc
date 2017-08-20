@@ -1170,8 +1170,7 @@ procedure opj_stream_set_read_function(p_stream: Popj_stream_t; p_function: opj_
  * @param       p_stream    the stream to modify
  * @param       p_function  the function to use a write function.
 *)
-procedure opj_stream_set_write_function(p_stream: Popj_stream_t,
-        opj_stream_write_fn p_function); cdecl; external LIB_LIBOPENJPEG;
+procedure opj_stream_set_write_function(p_stream: Popj_stream_t; p_function: opj_stream_write_fn); cdecl; external LIB_LIBOPENJPEG;
 
 (**
  * Sets the given function to be used as a skip function.
@@ -1317,9 +1316,7 @@ function opj_codec_set_threads(p_codec: Popj_codec_t; num_threads: cint): OPJ_BO
  *
  * @return true             if the main header of the codestream and the JP2 header is correctly read.
  *)
-function opj_read_header(p_stream: Popj_stream_t,
-        p_codec: Popj_codec_t,
-        opj_image_t **p_image): OPJ_BOOL; cdecl; external LIB_LIBOPENJPEG;
+function opj_read_header(p_stream: Popj_stream_t;c p_codec: Popj_codec_t; p_image: PPopj_image_t ): OPJ_BOOL; cdecl; external LIB_LIBOPENJPEG;
 
 (**
  * Sets the given area to be decoded. This function should be called right after opj_read_header and before any tile header reading.
@@ -1333,10 +1330,7 @@ function opj_read_header(p_stream: Popj_stream_t,
  *
  * @return  true            if the area could be set.
  *)
-function opj_set_decode_area(p_codec: Popj_codec_t,
-        opj_image_t* p_image,
-        OPJ_INT32 p_start_x, OPJ_INT32 p_start_y,
-        OPJ_INT32 p_end_x, OPJ_INT32 p_end_y): OPJ_BOOL; cdecl; external LIB_LIBOPENJPEG;
+function opj_set_decode_area(p_codec: Popj_codec_t; p_image: Popj_image_t; p_start_x: OPJ_INT32; p_start_y: OPJ_INT32; p_end_x: OPJ_INT32; p_end_y: OPJ_INT32): OPJ_BOOL; cdecl; external LIB_LIBOPENJPEG;
 
 (**
  * Decode an image from a JPEG-2000 codestream
@@ -1381,11 +1375,7 @@ function opj_set_decoded_resolution_factor(p_codec: Popj_codec_t; res_factor: OP
  *
  * @return  true if the data could be written.
  *)
-function opj_write_tile(p_codec: Popj_codec_t,
-        OPJ_UINT32 p_tile_index,
-        OPJ_BYTE * p_data,
-        OPJ_UINT32 p_data_size,
-        p_stream: Popj_stream_t): OPJ_BOOL; cdecl; external LIB_LIBOPENJPEG;
+function opj_write_tile(p_codec: Popj_codec_t; p_tile_index: OPJ_UINT32; p_data: POPJ_BYTE; p_data_size: OPJ_UINT32; p_stream: Popj_stream_t): OPJ_BOOL; cdecl; external LIB_LIBOPENJPEG;
 
 (**
  * Reads a tile header. This function is compulsory and allows one to know the size of the tile that will be decoded.
@@ -1408,14 +1398,7 @@ function opj_write_tile(p_codec: Popj_codec_t,
  * @return  true            if the tile header could be decoded. In case the decoding should end, the returned value is still true.
  *                          returning false may be the result of a shortage of memory or an internal error.
  *)
-function opj_read_tile_header(p_codec: Popj_codec_t,
-        opj_stream_t * p_stream,
-        OPJ_UINT32 * p_tile_index,
-        OPJ_UINT32 * p_data_size,
-        OPJ_INT32 * p_tile_x0, OPJ_INT32 * p_tile_y0,
-        OPJ_INT32 * p_tile_x1, OPJ_INT32 * p_tile_y1,
-        OPJ_UINT32 * p_nb_comps,
-        OPJ_BOOL * p_should_go_on): OPJ_BOOL; cdecl; external LIB_LIBOPENJPEG;
+function opj_read_tile_header(p_codec: Popj_codec_t; p_stream: Popj_stream_t; p_tile_index: POPJ_UINT32; p_data_size: POPJ_UINT32; p_tile_x0: POPJ_INT32; p_tile_y0: POPJ_INT32; p_tile_x1: POPJ_INT32; p_tile_y1: POPJ_INT32; p_nb_comps: POPJ_UINT32; p_should_go_on: POPJ_BOOL): OPJ_BOOL; cdecl; external LIB_LIBOPENJPEG;
 
 (**
  * Reads a tile data. This function is compulsory and allows one to decode tile data. opj_read_tile_header should be called before.
@@ -1429,11 +1412,7 @@ function opj_read_tile_header(p_codec: Popj_codec_t,
  *
  * @return  true            if the data could be decoded.
  *)
-function opj_decode_tile_data(p_codec: Popj_codec_t,
-        OPJ_UINT32 p_tile_index,
-        OPJ_BYTE * p_data,
-        OPJ_UINT32 p_data_size,
-        p_stream: Popj_stream_t): OPJ_BOOL; cdecl; external LIB_LIBOPENJPEG;
+function opj_decode_tile_data(p_codec: Popj_codec_t; p_tile_index: OPJ_UINT32; p_data: POPJ_BYTE; p_data_size: OPJ_UINT32; p_stream: Popj_stream_t): OPJ_BOOL; cdecl; external LIB_LIBOPENJPEG;
 
 (* COMPRESSION FUNCTIONS*)
 
@@ -1442,7 +1421,7 @@ function opj_decode_tile_data(p_codec: Popj_codec_t,
  * @param   format      Coder to select
  * @return              Returns a handle to a compressor if successful, returns NULL otherwise
  *)
-function opj_create_compress(OPJ_CODEC_FORMAT format): Popj_codec_t; cdecl; external LIB_LIBOPENJPEG;
+function opj_create_compress(format: OPJ_CODEC_FORMAT): Popj_codec_t; cdecl; external LIB_LIBOPENJPEG;
 
 (**
 Set encoding parameters to default values, that means :
@@ -1465,8 +1444,7 @@ Set encoding parameters to default values, that means :
 </ul>
 @param parameters Compression parameters
 *)
-procedure opj_set_default_encoder_parameters(
-    parameters: Popj_cparameters_t); cdecl; external LIB_LIBOPENJPEG;
+procedure opj_set_default_encoder_parameters(parameters: Popj_cparameters_t); cdecl; external LIB_LIBOPENJPEG;
 
 (**
  * Setup the encoder parameters using the current image and using user parameters.
@@ -1474,9 +1452,7 @@ procedure opj_set_default_encoder_parameters(
  * @param parameters    Compression parameters
  * @param image         Input filled image
  *)
-function opj_setup_encoder(p_codec: Popj_codec_t,
-        parameters: Popj_cparameters_t,
-        image: Popj_image_t): OPJ_BOOL; cdecl; external LIB_LIBOPENJPEG;
+function opj_setup_encoder(p_codec: Popj_codec_t; parameters: Popj_cparameters_t; image: Popj_image_t): OPJ_BOOL; cdecl; external LIB_LIBOPENJPEG;
 
 (**
  * Start to compress the current image.
@@ -1491,8 +1467,7 @@ function opj_start_compress(p_codec: Popj_codec_t; p_image: Popj_image_t; p_stre
  * @param p_codec       Compressor handle
  * @param p_stream      Input stgream
  *)
-function opj_end_compress(p_codec: Popj_codec_t,
-        p_stream: Popj_stream_t): OPJ_BOOL; cdecl; external LIB_LIBOPENJPEG;
+function opj_end_compress(p_codec: Popj_codec_t; p_stream: Popj_stream_t): OPJ_BOOL; cdecl; external LIB_LIBOPENJPEG;
 
 (**
  * Encode an image into a JPEG-2000 codestream
@@ -1501,8 +1476,7 @@ function opj_end_compress(p_codec: Popj_codec_t,
  *
  * @return              Returns true if successful, returns false otherwise
  *)
-function opj_encode(p_codec: Popj_codec_t,
-        p_stream: Popj_stream_t): OPJ_BOOL; cdecl; external LIB_LIBOPENJPEG;
+function opj_encode(p_codec: Popj_codec_t; p_stream: Popj_stream_t): OPJ_BOOL; cdecl; external LIB_LIBOPENJPEG;
 (*
 ==========================================================
    codec output functions definitions
@@ -1514,8 +1488,7 @@ function opj_encode(p_codec: Popj_codec_t,
 Destroy Codestream information after compression or decompression
 @param cstr_info Codestream information structure
 *)
-procedure opj_destroy_cstr_info(opj_codestream_info_v2_t
-        **cstr_info); cdecl; external LIB_LIBOPENJPEG;
+procedure opj_destroy_cstr_info(cstr_info: PPopj_codestream_info_v2_t); cdecl; external LIB_LIBOPENJPEG;
 
 
 (**
@@ -1526,9 +1499,7 @@ procedure opj_destroy_cstr_info(opj_codestream_info_v2_t
  * @param   output_stream   output stream where dump the information gotten from the codec.
  *
  *)
-procedure opj_dump_codec(p_codec: Popj_codec_t,
-        OPJ_INT32 info_flag,
-        FILE* output_stream); cdecl; external LIB_LIBOPENJPEG;
+procedure opj_dump_codec(p_codec: Popj_codec_t; info_flag: OPJ_INT32; FILE* output_stream); cdecl; external LIB_LIBOPENJPEG;
 
 (**
  * Get the codestream information from the codec

@@ -1,4 +1,4 @@
-/*
+(*
  * The copyright in this software is being made available under the 2-clauses
  * BSD License, included below. This software may be subject to other third
  * party and contributor rights, including patent rights, and no such rights
@@ -27,7 +27,7 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- */
+ *)
 #ifndef OPJ_STDINT_H
 #define OPJ_STDINT_H
 
@@ -49,4 +49,4 @@ typedef unsigned __int64  uint64_t;
 #endif
 #endif
 
-#endif /* OPJ_STDINT_H */
+#endif (* OPJ_STDINT_H *)

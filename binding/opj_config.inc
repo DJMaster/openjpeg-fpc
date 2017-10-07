@@ -14,5 +14,5 @@ const
 (* Version number. *)
 const
   OPJ_VERSION_MAJOR = 2;
-  OPJ_VERSION_MINOR = 2;
+  OPJ_VERSION_MINOR = 3;
   OPJ_VERSION_BUILD = 0;

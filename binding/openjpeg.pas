@@ -413,9 +413,12 @@ type
     numpocs: OPJ_UINT32;
     (** number of layers *)
     tcp_numlayers: cint;
-    (** rates of layers - might be subsequently limited by the max_cs_size field *)
+    (** rates of layers - might be subsequently limited by the max_cs_size field.
+     * Should be decreasing. 1 can be
+     * used as last value to indicate the last layer is lossless. *)
     tcp_rates: array[0..99] of cfloat;
-    (** different psnr for successive layers *)
+    (** different psnr for successive layers. Should be increasing. 0 can be
+     * used as last value to indicate the last layer is lossless. *)
     tcp_distoratio: array[0..99] of cfloat;
     (** number of resolutions *)
     numresolution: cint;
@@ -917,9 +920,9 @@ type
     csty: OPJ_UINT32;
     (** number of resolutions *)
     numresolutions: OPJ_UINT32;
-    (** code-blocks width *)
+    (** log2 of code-blocks width *)
     cblkw: OPJ_UINT32;
-    (** code-blocks height *)
+    (** log2 of code-blocks height *)
     cblkh: OPJ_UINT32;
     (** code-block coding style *)
     cblksty: OPJ_UINT32;
@@ -1356,9 +1359,46 @@ function opj_codec_set_threads(p_codec: Popj_codec_t; num_threads: cint): OPJ_BO
  * @return true             if the main header of the codestream and the JP2 header is correctly read.
  *)
 function opj_read_header(p_stream: Popj_stream_t; p_codec: Popj_codec_t; p_image: PPopj_image_t): OPJ_BOOL; cdecl; external LIB_LIBOPENJPEG;
-        
+
+(** Restrict the number of components to decode.
+ *
+ * This function should be called after opj_read_header().
+ *
+ * This function enables to restrict the set of decoded components to the
+ * specified indices.
+ * Note that the current implementation (apply_color_transforms == OPJ_FALSE)
+ * is such that neither the multi-component transform at codestream level,
+ * nor JP2 channel transformations will be applied.
+ * Consequently the indices are relative to the codestream.
+ *
+ * Note: opj_decode_tile_data() should not be used together with opj_set_decoded_components().
+ *
+ * @param   p_codec         the jpeg2000 codec to read.
+ * @param   numcomps        Size of the comps_indices array.
+ * @param   comps_indices   Array of numcomps values representing the indices
+ *                          of the components to decode (relative to the
+ *                          codestream, starting at 0)
+ * @param   apply_color_transforms Whether multi-component transform at codestream level
+ *                                 or JP2 channel transformations should be applied.
+ *                                 Currently this parameter should be set to OPJ_FALSE.
+ *                                 Setting it to OPJ_TRUE will result in an error.
+ *
+ * @return OPJ_TRUE         in case of success.
+ *)
+function opj_set_decoded_components(p_codec: Popj_codec_t; numcomps: OPJ_UINT32; const comps_indices: POPJ_UINT32; apply_color_transforms: OPJ_BOOL): OPJ_BOOL; cdecl; external LIB_LIBOPENJPEG;
+
 (**
  * Sets the given area to be decoded. This function should be called right after opj_read_header and before any tile header reading.
+ *
+ * The coordinates passed to this function should be expressed in the reference grid,
+ * that is to say at the highest resolution level, even if requesting the image at lower
+ * resolution levels.
+ *
+ * Generally opj_set_decode_area() should be followed by opj_decode(), and the
+ * codec cannot be re-used.
+ * In the particular case of an image made of a single tile, several sequences of
+ * calls to opoj_set_decode_area() and opj_decode() are allowed, and will bring
+ * performance improvements when reading an image by chunks.
  *
  * @param   p_codec         the jpeg2000 codec.
  * @param   p_image         the decoded image previously setted by opj_read_header
@@ -1419,6 +1459,8 @@ function opj_write_tile(p_codec: Popj_codec_t; p_tile_index: OPJ_UINT32; p_data:
 (**
  * Reads a tile header. This function is compulsory and allows one to know the size of the tile that will be decoded.
  * The user may need to refer to the image got by opj_read_header to understand the size being taken by the tile.
+ *
+ * Note: opj_decode_tile_data() should not be used together with opj_set_decoded_components().
  *
  * @param   p_codec         the jpeg2000 codec.
  * @param   p_tile_index    pointer to a value that will hold the index of the tile being decoded, in case of success.
